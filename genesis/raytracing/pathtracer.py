@@ -92,10 +92,11 @@ def get_deafult_scene(res = 512):
 
     sensor = mi.load_dict({
             'type': 'perspective',
+            # 修改这里，使用 mitsuba.Point3f 类型的参数
             'to_world': T.look_at(
-                            origin=(0, 1, 3),
-                            target=(0, 1, 0),
-                            up=(0, 1, 0)
+                            origin=mi.Point3f(0, 1, 3),  # 使用 mitsuba.Point3f 替换 tuple
+                            target=mi.Point3f(0, 1, 0),  # 使用 mitsuba.Point3f 替换 tuple
+                            up=mi.Vector3f(0, 1, 0)      # 使用 mitsuba.Vector3f 替换 tuple
                         ),
             'fov': 60,
             'film': {
@@ -114,12 +115,10 @@ def get_deafult_scene(res = 512):
             },
         })
 
-
     default_scene ={
             'type': 'scene',
             'integrator': integrator,
             'sensor': sensor,
-            
             'while':{
                 'type':'diffuse',
                 'reflectance': { 'type': 'rgb', 'value': (0.8, 0.8, 0.8) }, 
@@ -137,13 +136,12 @@ def get_deafult_scene(res = 512):
                 'type': 'spot',
                 'cutoff_angle': 40,
                 'to_world': T.look_at(
-                                origin=(0, 0, 3),
-                                target=(0, 0, 0),
-                                up=(0, 1, 0)
+                                origin=mi.Point3f(0, 0, 3),  # 使用 mitsuba.Point3f 替换 tuple
+                                target=mi.Point3f(0, 0, 0),  # 使用 mitsuba.Point3f 替换 tuple
+                                up=mi.Vector3f(0, 1, 0)      # 使用 mitsuba.Vector3f 替换 tuple
                             ),
                 'intensity': 1000.0,
             }
-
         }
     return default_scene
 
