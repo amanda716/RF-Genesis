@@ -88,62 +88,62 @@ class RayTracer:
 def get_deafult_scene(res = 512):
     integrator = mi.load_dict({
         'type': 'direct',
-        })
+    })
 
     sensor = mi.load_dict({
-            'type': 'perspective',
-            # 修改这里，使用 mitsuba.Point3f 类型的参数
+        'type': 'perspective',
+        # 修改这里，使用 mitsuba.Point3f 类型的参数
+        'to_world': T.look_at(
+                        origin=mi.Point3f(0, 1, 3),  # 使用 mitsuba.Point3f 替换 tuple
+                        target=mi.Point3f(0, 1, 0),  # 使用 mitsuba.Point3f 替换 tuple
+                        up=mi.Point3f(0, 1, 0)       # 使用 mitsuba.Point3f 替换 mi.Vector3f
+                    ),
+        'fov': 60,
+        'film': {
+            'type': 'hdrfilm',
+            'width': res,
+            'height': res,
+            'rfilter': { 'type': 'gaussian' },
+            'sample_border': True,
+            'pixel_format': 'luminance',
+            'component_format': 'float32',
+        },
+        'sampler':{
+            'type': 'independent',
+            'sample_count': 1,
+            'seed':42
+        },
+    })
+
+    default_scene = {
+        'type': 'scene',
+        'integrator': integrator,
+        'sensor': sensor,
+        'while':{
+            'type':'diffuse',
+            'reflectance': { 'type': 'rgb', 'value': (0.8, 0.8, 0.8) }, 
+        },
+        'smpl':{
+            'type': 'ply',
+            'filename': '../models/male.ply',
+            "mybsdf": {
+                "type": "ref",
+                "id": "while"
+            },
+        },
+        'tx':{
+            'type': 'spot',
+            'cutoff_angle': 40,
             'to_world': T.look_at(
-                            origin=mi.Point3f(0, 1, 3),  # 使用 mitsuba.Point3f 替换 tuple
-                            target=mi.Point3f(0, 1, 0),  # 使用 mitsuba.Point3f 替换 tuple
-                            up=mi.Vector3f(0, 1, 0)      # 使用 mitsuba.Vector3f 替换 tuple
+                            origin=mi.Point3f(0, 0, 3),  # 使用 mitsuba.Point3f 替换 tuple
+                            target=mi.Point3f(0, 0, 0),  # 使用 mitsuba.Point3f 替换 tuple
+                            up=mi.Point3f(0, 1, 0)       # 使用 mitsuba.Point3f 替换 mi.Vector3f
                         ),
-            'fov': 60,
-            'film': {
-                'type': 'hdrfilm',
-                'width': res,
-                'height': res,
-                'rfilter': { 'type': 'gaussian' },
-                'sample_border': True,
-                'pixel_format': 'luminance',
-                'component_format': 'float32',
-            },
-            'sampler':{
-                'type': 'independent',
-                'sample_count': 1,
-                'seed':42
-            },
-        })
-
-    default_scene ={
-            'type': 'scene',
-            'integrator': integrator,
-            'sensor': sensor,
-            'while':{
-                'type':'diffuse',
-                'reflectance': { 'type': 'rgb', 'value': (0.8, 0.8, 0.8) }, 
-            },
-            'smpl':{
-                'type': 'ply',
-                'filename': '../models/male.ply',
-                "mybsdf": {
-                    "type": "ref",
-                    "id": "while"
-                },
-            },
-
-            'tx':{
-                'type': 'spot',
-                'cutoff_angle': 40,
-                'to_world': T.look_at(
-                                origin=mi.Point3f(0, 0, 3),  # 使用 mitsuba.Point3f 替换 tuple
-                                target=mi.Point3f(0, 0, 0),  # 使用 mitsuba.Point3f 替换 tuple
-                                up=mi.Vector3f(0, 1, 0)      # 使用 mitsuba.Vector3f 替换 tuple
-                            ),
-                'intensity': 1000.0,
-            }
+            'intensity': 1000.0,
         }
+    }
     return default_scene
+
 
 
 
